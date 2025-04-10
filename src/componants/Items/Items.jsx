@@ -28,7 +28,7 @@ const Items = () => {
     }
   };
 
-  // ✅ Handle removing item from favorites with toast
+  //  removing item from favorites with toast
   const handleRemoveFromFavorites = (productId) => {
     const removedProduct = favorites.find((fav) => fav.id === productId);
     if (!removedProduct) return;
