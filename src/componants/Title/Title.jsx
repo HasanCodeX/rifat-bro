@@ -7,8 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Title = ({ cart, setCart }) => {
   const [bit, setBit] = useState([]);
-  const [favoritedIds, setFavoritedIds] = useState([]);  // Initialize state for favorited IDs
-  const [favorites, setFavorites] = useState([]); // Initialize state for favorite products
+  const [favoritedIds, setFavoritedIds] = useState([]); 
+  const [favorites, setFavorites] = useState([]);
 
   const handleBit = (pro) => {
     setBit([...bit, pro]);
@@ -38,7 +38,7 @@ const Title = ({ cart, setCart }) => {
         cart={cart}
         setCart={setCart}
         isFavorited={isFavorited}
-        handleFavorite={handleFavorite}  // Pass handleFavorite to Items component
+        handleFavorite={handleFavorite}  
       />
     </div>
   );

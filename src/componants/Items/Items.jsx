@@ -13,34 +13,38 @@ const Items = () => {
   useEffect(() => {
     fetch("public/products.json")
       .then((res) => res.json())
-      .then((data) => setProduct(data.slice(0, 6))); 
+      .then((data) => setProduct(data.slice(0, 6)));
   }, []);
 
-  // Handle adding item to favorites
+  // ✅ Handle adding item to favorites
   const handleAddToFavorites = (product) => {
     if (!favorites.some((fav) => fav.id === product.id)) {
-      // Add to favorites
-      setFavorites((prev) => {
-        const updatedFavorites = [...prev, product];
-        setTotalAmount((prevTotal) => prevTotal + product.currentBidPrice);
-        return updatedFavorites;
-      });
+      const updatedFavorites = [...favorites, product];
+      setFavorites(updatedFavorites);
+
+      setTotalAmount((prevTotal) => prevTotal + Number(product.currentBidPrice));
+
       toast.success(`${product.title} added to favorites!`);
     }
   };
 
-  // Handle removing item from favorites
+  // ✅ Handle removing item from favorites with toast
   const handleRemoveFromFavorites = (productId) => {
+    const removedProduct = favorites.find((fav) => fav.id === productId);
+    if (!removedProduct) return;
+
     const updatedFavorites = favorites.filter((fav) => fav.id !== productId);
     setFavorites(updatedFavorites);
-    const removedProduct = favorites.find((fav) => fav.id === productId);
-    setTotalAmount((prevTotal) => prevTotal - removedProduct.currentBidPrice);
+
+    setTotalAmount((prevTotal) => prevTotal - Number(removedProduct.currentBidPrice));
+
+    toast.warn(`${removedProduct.title} removed from favorites!`);
   };
 
   return (
     <div>
       <div className="mx-auto flex gap-4 mt-8">
-        {/* Products section */}
+        {/* Products Section */}
         <div className="products w-[1016px] bg-white rounded-lg pb-12">
           <div className="flex justify-between p-2 items-center">
             <div className="overflow-x-auto">
@@ -79,9 +83,9 @@ const Items = () => {
                           }`}
                         >
                           {favorites.some((fav) => fav.id === prod.id) ? (
-                            <FaHeart /> 
+                            <FaHeart />
                           ) : (
-                            <FaRegHeart /> 
+                            <FaRegHeart />
                           )}
                         </button>
                       </td>
@@ -94,7 +98,7 @@ const Items = () => {
           <hr className="border text-[#DCE5F3]" />
         </div>
 
-        {/* Favorite Items Section */}
+        {/* Favorites Section */}
         <div className="favorite w-[496px] p-2 rounded-lg bg-white">
           <div className="flex gap-4 ml-22 p-2">
             <h3>
@@ -104,25 +108,21 @@ const Items = () => {
           </div>
           <hr className="border text-[#DCE5F3]" />
 
-
-        
           <div className="text-center mb-6">
-  {/* Display message only when there are no favorites */}
-  {favorites.length === 0 ? (
-    <>
-      <h3 className="mt-[35px] text-[26px] font-medium">
-        No favorites yet
-      </h3>
-      <p className="text-[18px] opacity-80 mt-2">
-        Click the heart icon on any item <br />
-        to add it to your favorites
-      </p>
-    </>
-  ) : null}
-</div>
+            {favorites.length === 0 ? (
+              <>
+                <h3 className="mt-[35px] text-[26px] font-medium">
+                  No favorites yet
+                </h3>
+                <p className="text-[18px] opacity-80 mt-2">
+                  Click the heart icon on any item <br />
+                  to add it to your favorites
+                </p>
+              </>
+            ) : null}
+          </div>
 
-
-          {/* Displaying favorite items */}
+          {/* Display favorite items */}
           {favorites.map((fav) => (
             <div key={fav.id}>
               <div className="flex items-center p-2">
@@ -148,6 +148,7 @@ const Items = () => {
               <hr className="border text-[#DCE5F3]" />
             </div>
           ))}
+
           <hr className="border text-[#DCE5F3]" />
           <div className="flex justify-between my-2">
             <h3 className="text-[26px]">Total Amount</h3>
